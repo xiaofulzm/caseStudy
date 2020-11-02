@@ -6,10 +6,87 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>两种不一样的打字效果</title>
     <style>
-        
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(#233,rgb(76, 183, 233))
+        }
+        .text{
+            font-size: 45px;
+            color: #fff;
+        }
+        .text>.cursor{
+            color: #000;
+            animation: flash 0.3s linear infinite;
+        }
+
+        @keyframes flash{
+            from{
+                opacity: 0;
+            }
+            to{
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
-    
+    <div class="text">
+        <span class="word">
+        </span>
+        <span class="cursor">|</span>
+    </div>
+    <script>
+        // 获取元素
+        let  oWord = document.querySelector(".word");
+
+        let word  = '大家好,我是小夫, 一个简单的程序员!';
+        oWord.innerHTML = '我';
+        //  第一种
+        let len = word.length
+        // for(let i=0; i<len ; i++ ){
+        //     setTimeout(()=>{
+        //         // 字符串截取
+        //         oWord.innerHTML = word.substr(0,i);
+        //     },(i-1)*100)
+        // }
+
+
+        // async await
+        // 1 封装一个函数
+        function setText(t){
+            return new Promise((resolve,reject)=>{
+                setTimeout(()=>{
+                    oWord.innerHTML = t;
+                    resolve();
+                },100);
+            });
+        }
+
+        // 声明一个函数
+        async function main(flag){
+            // 遍历字符串
+            if(flag){
+                for(let i = 0; i<=len ; i++){
+                    await setText(word.substr(0,i));
+                }
+            }else{ // 取反
+                for(let i = len ; i > 0 ; i--){
+                    await setText(word.substr(0,i));
+                }
+            }
+
+            setTimeout(()=>{
+                main(!flag);
+            },100)
+        }
+        main(1);
+    </script>
 </body>
 </html>
